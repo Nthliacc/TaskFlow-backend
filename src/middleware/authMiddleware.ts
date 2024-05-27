@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-
 dotenv.config();
-
 // Decodifica a chave secreta Base64
 const JWT_SECRET_BASE64 = process.env.JWT_SECRET_BASE64 as string;
 const JWT_SECRET = Buffer.from(JWT_SECRET_BASE64, 'base64').toString('utf8');

@@ -78,7 +78,6 @@ export const addTask = async (req: Request, res: Response) => {
         createdById: userId,
       },
     });
-    await addTaskToGoogleCalendar(newTask);
 
     // Enviar e-mail ao usuário
     const userFind = await prisma.user.findUnique({ where: { id: userId } });

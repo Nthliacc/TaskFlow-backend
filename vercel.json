@@ -1,0 +1,9 @@
+{
+    "functions": {
+      "api": {
+        "handler": "index.handler",
+        "runtime": "nodejs14.x"
+      }
+    }
+  }
+  
