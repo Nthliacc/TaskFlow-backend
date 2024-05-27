@@ -1,9 +1,9 @@
 {
-    "functions": {
-      "api": {
-        "handler": "index.handler",
-        "runtime": "nodejs14.x"
-      }
-    }
-  }
-  
+    "version": 2,
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "src/app.ts"
+        }
+    ]
+}
