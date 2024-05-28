@@ -9,9 +9,17 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // Decodifica a chave secreta Base64
 const JWT_SECRET_BASE64 = process.env.JWT_SECRET_BASE64;
-const JWT_SECRET = Buffer.from(JWT_SECRET_BASE64, 'base64').toString('utf8');
+const JWT_SECRET = process.env.JWT_SECRET;
+try {
+    // jwt.verify(JWT_SECRET, JWT_SECRET);
+    // Use 'JWT_SECRET' para assinar tokens JWT
+}
+catch (error) {
+    console.error('Erro ao decodificar a chave secreta Base64:', error);
+    process.exit(1);
+}
 const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Token not provided or invalid format' });
     }
@@ -32,6 +40,6 @@ const generateToken = (userId, email) => {
 };
 exports.generateToken = generateToken;
 const decodeToken = (token) => {
-    return jsonwebtoken_1.default.verify(token, JWT_SECRET);
+    return jsonwebtoken_1.default.verify(token.split(' ')[1], JWT_SECRET);
 };
 exports.decodeToken = decodeToken;

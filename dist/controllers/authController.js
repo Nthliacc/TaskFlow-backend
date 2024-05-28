@@ -6,16 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkToken = exports.loginUser = void 0;
 const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const authMiddleware_1 = require("../middleware/authMiddleware");
 dotenv_1.default.config();
 const prisma = new client_1.PrismaClient();
-// Decodifica a chave secreta Base64
-const JWT_SECRET_BASE64 = process.env.JWT_SECRET_BASE64;
-const JWT_SECRET = Buffer.from(JWT_SECRET_BASE64, "base64").toString("utf8");
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
+    console.log("email:", email, "password:", password);
     try {
         // Buscar usuário pelo e-mail
         const user = await prisma.user.findUnique({ where: { email } });
@@ -45,7 +42,7 @@ const checkToken = async (req, res) => {
     }
     try {
         if (token) {
-            jsonwebtoken_1.default.verify(token, JWT_SECRET)
+            (0, authMiddleware_1.decodeToken)(token)
                 ? res.json({ message: "Token válido" })
                 : res.status(403).json({ message: "Token inválido" });
         }

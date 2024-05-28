@@ -164,7 +164,11 @@ export const getTaskById = async (req: Request, res: Response) => {
 export const deleteTask = async (req: Request, res: Response) => {
   const taskId = parseInt(req.params.id);
   const token = req.headers.authorization;
-  
+
+  if (!token) {
+    return res.status(400).json({ error: "Token não fornecido" });
+  }
+
   const userId = decodeToken(token).userId;
 
   try {

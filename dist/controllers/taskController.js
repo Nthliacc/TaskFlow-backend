@@ -7,8 +7,8 @@ exports.deleteTask = exports.getTaskById = exports.updateTask = exports.addTask 
 const client_1 = require("@prisma/client");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const process_1 = __importDefault(require("process"));
+const authMiddleware_1 = require("../middleware/authMiddleware");
 const prisma = new client_1.PrismaClient();
-const dirname = process_1.default.env.PWD;
 const passwordEmail = process_1.default.env.EMAIL_PASSWORD;
 const emailUser = process_1.default.env.EMAIL_USER;
 // Configuração do Nodemailer
@@ -65,7 +65,11 @@ const getTasks = async (req, res) => {
 exports.getTasks = getTasks;
 const addTask = async (req, res) => {
     const { title, description, date, priority } = req.body;
-    const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ error: "Token não fornecido" });
+    }
+    const userId = (0, authMiddleware_1.decodeToken)(token).userId;
     try {
         const newTask = await prisma.task.create({
             data: {
@@ -92,7 +96,11 @@ exports.addTask = addTask;
 const updateTask = async (req, res) => {
     const taskId = parseInt(req.params.id);
     const { title, description, date, priority, completed } = req.body;
-    const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ error: "Token não fornecido" });
+    }
+    const userId = (0, authMiddleware_1.decodeToken)(token).userId;
     try {
         const updatedTask = await prisma.task.update({
             where: { id: taskId },
@@ -140,7 +148,11 @@ const getTaskById = async (req, res) => {
 exports.getTaskById = getTaskById;
 const deleteTask = async (req, res) => {
     const taskId = parseInt(req.params.id);
-    const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ error: "Token não fornecido" });
+    }
+    const userId = (0, authMiddleware_1.decodeToken)(token).userId;
     try {
         // Verificar se a tarefa existe e quem é o proprietário
         const task = await prisma.task.findUnique({
