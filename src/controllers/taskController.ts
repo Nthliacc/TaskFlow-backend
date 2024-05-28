@@ -45,7 +45,7 @@ export const getTasks = async (req: Request, res: Response) => {
       },
     });
 
-    const response = tasks.map((task: any) => ({
+    const response = tasks.map((task: Task) => ({
       id: task.id,
       title: task.title,
       description: task.description,

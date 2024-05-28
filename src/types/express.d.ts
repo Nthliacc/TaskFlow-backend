@@ -11,8 +11,10 @@ export interface Task {
   id: number;
   title: string;
   description: string;
-  date: Date;
-  priority: number;
+  date: string | null;
+  priority: string;
   completed: boolean;
-  createdBy: User;
+  createdBy?: User;
+  createdAt: Date;
+  createdById?: number;
 }
