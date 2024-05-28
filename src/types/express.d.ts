@@ -1,7 +1,18 @@
-import { User } from '../models/User'; // Ajuste o caminho conforme necessário
+import { User } from '../models/User';
 
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: User; // Defina o tipo de `user` conforme a sua aplicação
+    user?: User;
   }
+}
+
+// models/Task
+export interface Task {
+  id: number;
+  title: string;
+  description: string;
+  date: Date;
+  priority: number;
+  completed: boolean;
+  createdBy: User;
 }

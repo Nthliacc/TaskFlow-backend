@@ -44,7 +44,7 @@ const getTasks = async (req, res) => {
                 createdBy: true,
             },
         });
-        const response = tasks.map(task => ({
+        const response = tasks.map((task) => ({
             id: task.id,
             title: task.title,
             description: task.description,

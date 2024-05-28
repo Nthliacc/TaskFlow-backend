@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 import process from "process";
 import { decodeToken } from "../middleware/authMiddleware";
+import { Task } from "../types/express";
 
 const prisma = new PrismaClient();
 const passwordEmail = process.env.EMAIL_PASSWORD;
@@ -44,7 +45,7 @@ export const getTasks = async (req: Request, res: Response) => {
       },
     });
 
-    const response = tasks.map(task => ({
+    const response = tasks.map((task: Task) => ({
       id: task.id,
       title: task.title,
       description: task.description,
