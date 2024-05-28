@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 import process from "process";
+import { decodeToken } from "../middleware/authMiddleware";
 
 const prisma = new PrismaClient();
-const dirname = process.env.PWD;
 const passwordEmail = process.env.EMAIL_PASSWORD;
 const emailUser = process.env.EMAIL_USER;
 
@@ -65,8 +65,12 @@ export const getTasks = async (req: Request, res: Response) => {
 
 export const addTask = async (req: Request, res: Response) => {
   const { title, description, date, priority } = req.body;
-  const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+  const token = req.headers.authorization;
 
+  if (!token) {
+    return res.status(400).json({ error: "Token não fornecido" });
+  }
+  const userId = decodeToken(token).userId;
   try {
     const newTask = await prisma.task.create({
       data: {
@@ -78,7 +82,6 @@ export const addTask = async (req: Request, res: Response) => {
         createdById: userId,
       },
     });
-    await addTaskToGoogleCalendar(newTask);
 
     // Enviar e-mail ao usuário
     const userFind = await prisma.user.findUnique({ where: { id: userId } });
@@ -99,7 +102,12 @@ export const addTask = async (req: Request, res: Response) => {
 export const updateTask = async (req: Request, res: Response) => {
   const taskId = parseInt(req.params.id);
   const { title, description, date, priority, completed } = req.body;
-  const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token não fornecido" });
+  }
+  const userId =  decodeToken(token).userId
 
   try {
     const updatedTask = await prisma.task.update({
@@ -155,7 +163,9 @@ export const getTaskById = async (req: Request, res: Response) => {
 
 export const deleteTask = async (req: Request, res: Response) => {
   const taskId = parseInt(req.params.id);
-  const userId = req.user.id; // Assumindo que você tem o ID do usuário no objeto de solicitação
+  const token = req.headers.authorization;
+  
+  const userId = decodeToken(token).userId;
 
   try {
     // Verificar se a tarefa existe e quem é o proprietário

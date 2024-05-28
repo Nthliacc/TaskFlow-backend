@@ -1,21 +1,16 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { generateToken } from "../middleware/authMiddleware";
+import { decodeToken, generateToken } from "../middleware/authMiddleware";
 
 dotenv.config();
 
 const prisma = new PrismaClient();
 
-// Decodifica a chave secreta Base64
-const JWT_SECRET_BASE64 = process.env.JWT_SECRET_BASE64 as string;
-const JWT_SECRET = Buffer.from(JWT_SECRET_BASE64, "base64").toString("utf8");
-
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
+  console.log("email:", email, "password:", password)
   try {
     // Buscar usuário pelo e-mail
     const user = await prisma.user.findUnique({ where: { email } });
@@ -41,8 +36,7 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const checkToken = async (req: Request, res: Response) => {
-  const token  = req.headers.authorization;
-
+  const token = req.headers.authorization;
   
   if (!token) {
     return res.status(400).json({ error: "Token não fornecido" });
@@ -50,7 +44,7 @@ export const checkToken = async (req: Request, res: Response) => {
 
   try {
     if (token) {
-      jwt.verify(token, JWT_SECRET)
+      decodeToken(token)
         ? res.json({ message: "Token válido" })
         : res.status(403).json({ message: "Token inválido" });
     } else {

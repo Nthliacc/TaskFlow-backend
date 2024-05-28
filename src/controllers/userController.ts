@@ -55,8 +55,8 @@ export const listUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
       select: {
-        id: true,    // Seleciona apenas o campo 'id'
-        name: true,  // Seleciona apenas o campo 'name'
+        id: true,
+        name: true,
         isAdmin: true,
       },
     });
