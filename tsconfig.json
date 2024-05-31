@@ -2,7 +2,7 @@
     "compilerOptions": {
       "target": "es5",
       "module": "CommonJS",
-      "outDir": "./functions",
+      "outDir": "./dist",
       "rootDir": "./src",
       "strict": true,
       "esModuleInterop": true,
