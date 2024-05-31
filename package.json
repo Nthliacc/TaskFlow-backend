@@ -23,7 +23,8 @@
     "mailersend": "^2.2.0",
     "nodemailer": "^6.9.13",
     "nodemailer-sendgrid-transport": "^0.2.0",
-    "prisma": "^3.0.0"
+    "prisma": "^3.0.0",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

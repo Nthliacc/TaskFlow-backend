@@ -7,9 +7,10 @@ import authRoutes from './routes/authRoutes';
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:3000', '*','https://task-flow-frontend-eta.vercel.app'],
+    origin: ['*'],
     credentials: true
 }));
+
 app.use(express.json());
 
 app.use('/tasks', taskRoutes);
