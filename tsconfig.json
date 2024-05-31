@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "target": "ESNext",
+      "target": "es5",
       "module": "CommonJS",
       "outDir": "./functions",
       "rootDir": "./src",
@@ -10,6 +10,7 @@
       "forceConsistentCasingInFileNames": true
     },
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
   }
   
