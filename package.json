@@ -4,11 +4,11 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc && cp -r functions dist/functions",
-    "start": "node src/server.ts",
+    "build": "tsc",
+    "vercel-build": "npx prisma migrate deploy",
+    "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --name init",
-    "engines": { "node": "14.x" }
+    "prisma:migrate": "prisma migrate dev --name init"
   },
   "dependencies": {
     "@netlify/functions": "^2.7.0",

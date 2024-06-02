@@ -4,3 +4,10 @@ node_modules
 
 # Local Netlify folder
 .netlify
+
+# tudo dentro da pasta dist é par aser ignorado pelo git
+dist/*
+dist
+dist/
+
+.vercel
